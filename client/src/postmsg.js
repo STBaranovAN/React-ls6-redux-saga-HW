@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import uuid from "uuid";
+// import uuid from "uuid";
 import axios from "axios";
 import { addMessage } from "./actions/actions";
 //import {Component} from "react";
@@ -85,7 +85,8 @@ class PostMsg extends React.Component {
 				<div className="row">
 					<div className="col text-right">
 						<button className="btn btn-primary"
-							onClick={ () => { this.props.addMessage(this.props.currentRoom, this.state.text) } }
+							onClick={ () => {
+								this.props.addMessage(this.state.text) } }
 						>
 							New message
 						</button>
@@ -100,7 +101,7 @@ class PostMsg extends React.Component {
 }
 
 function mapStateToProps(state){
-	return {currentRoom: state.selectedRoom || null, error: state.errorObj}
+	return {error: state.errorObj}
 }
 
 function mapDispatchToProps(dispatch){

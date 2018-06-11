@@ -16,32 +16,36 @@ export function selectRoom(currentRoom){
 	}
 };
 
-export function addMessage(currentRoom, msgText){
+export function addMessage(msgText){
 
-	return function(dispatch){
+	// return function(dispatch){
 
-		if(!msgText)
-		{
-			dispatch({
-				type: "ERR_EXIST",
-				payload: { where: "addMessage", text: "Enter message text!" }
-			});
-			return;
-		}
+	// 	if(!msgText)
+	// 	{
+	// 		dispatch({
+	// 			type: "ERR_EXIST",
+	// 			payload: { where: "addMessage", text: "Enter message text!" }
+	// 		});
+	// 		return;
+	// 	}
 
-		axios.post("http://localhost:6060/api/addmessage", {
-			text: msgText,
-			userId: 12345,
-			messageId: uuid.v4(),
-			roomId: currentRoom.id 
-			}).then( responseObj => {
-				dispatch(selectRoom(currentRoom));
-			}, err => {
-				dispatch({
-					type: "ERR_EXIST",
-					payload: { where: "addMessage", text: "Server error occured..." }
-				});
-			});
+	// 	axios.post("http://localhost:6060/api/addmessage", {
+	// 		text: msgText,
+	// 		userId: 12345,
+	// 		messageId: uuid.v4(),
+	// 		roomId: currentRoom.id 
+	// 		}).then( responseObj => {
+	// 			dispatch(selectRoom(currentRoom));
+	// 		}, err => {
+	// 			dispatch({
+	// 				type: "ERR_EXIST",
+	// 				payload: { where: "addMessage", text: "Server error occured..." }
+	// 			});
+	// 		});
+	// }
+	return {
+		type: "POST_MESSAGE",
+		payload: msgText
 	}
 };
 

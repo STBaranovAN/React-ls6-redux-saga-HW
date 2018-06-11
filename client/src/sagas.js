@@ -1,5 +1,7 @@
-import { call, put, takeEvery, takeLatest, all } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest, all, select } from "redux-saga/effects";
 import axios from "axios";
+import uuid from "uuid";
+import { getCurrentRoom } from './selectors'
 
 function* getAllRooms(action){ /// Worker Saga ///
 	// console.log("From SAGA", action);
@@ -27,13 +29,15 @@ function* getMessages(action){
 }
 
 function* postMessage(action){
-	let messages = yield call(axios.post, `http://localhost:6060/api/${action.payload}/messages`, {
-		text: msgText,
+	const currentRoom = yield select(getCurrentRoom);
+	yield call(axios.post, `http://localhost:6060/api/addmessage`, {
+		text: action.payload,
 		userId: 12345,
 		messageId: uuid.v4(),
-		roomId: action.payload.id 
+		roomId: currentRoom.id
 		});
-	// yield put({type: "ROOM_MSGS", payload: messages});
+	let messages = yield call(axios.get, `http://localhost:6060/api/${currentRoom.id}/messages`);
+	yield put({type: "ROOM_MSGS", payload: messages});
 }
 
 function* loginUser(action){
@@ -47,10 +51,11 @@ function* loginUser(action){
 	}
 }
 
-function* mySaga(){
+function* mySaga(){	/// Watcher Saga ///
 	yield all([
 		takeEvery("GET_ROOMS", getAllRooms),
 		takeEvery("GET_MESSAGES", getMessages),
+		takeEvery("POST_MESSAGE", postMessage),
 		takeLatest("LOGIN_USER", loginUser)
 	]);
 }

@@ -31114,31 +31114,36 @@ function selectRoom(currentRoom) {
 	};
 };
 
-function addMessage(currentRoom, msgText) {
+function addMessage(msgText) {
 
-	return function (dispatch) {
+	// return function(dispatch){
 
-		if (!msgText) {
-			dispatch({
-				type: "ERR_EXIST",
-				payload: { where: "addMessage", text: "Enter message text!" }
-			});
-			return;
-		}
+	// 	if(!msgText)
+	// 	{
+	// 		dispatch({
+	// 			type: "ERR_EXIST",
+	// 			payload: { where: "addMessage", text: "Enter message text!" }
+	// 		});
+	// 		return;
+	// 	}
 
-		axios.post("http://localhost:6060/api/addmessage", {
-			text: msgText,
-			userId: 12345,
-			messageId: _uuid2.default.v4(),
-			roomId: currentRoom.id
-		}).then(function (responseObj) {
-			dispatch(selectRoom(currentRoom));
-		}, function (err) {
-			dispatch({
-				type: "ERR_EXIST",
-				payload: { where: "addMessage", text: "Server error occured..." }
-			});
-		});
+	// 	axios.post("http://localhost:6060/api/addmessage", {
+	// 		text: msgText,
+	// 		userId: 12345,
+	// 		messageId: uuid.v4(),
+	// 		roomId: currentRoom.id 
+	// 		}).then( responseObj => {
+	// 			dispatch(selectRoom(currentRoom));
+	// 		}, err => {
+	// 			dispatch({
+	// 				type: "ERR_EXIST",
+	// 				payload: { where: "addMessage", text: "Server error occured..." }
+	// 			});
+	// 		});
+	// }
+	return {
+		type: "POST_MESSAGE",
+		payload: msgText
 	};
 };
 
@@ -31494,10 +31499,6 @@ var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-r
 
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
-var _uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -31509,6 +31510,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //import {Component} from "react";
 
 
+// import uuid from "uuid";
 var PostMsg = function (_React$Component) {
 	(0, _inherits3.default)(PostMsg, _React$Component);
 
@@ -31630,7 +31632,7 @@ var PostMsg = function (_React$Component) {
 							"button",
 							{ className: "btn btn-primary",
 								onClick: function onClick() {
-									_this2.props.addMessage(_this2.props.currentRoom, _this2.state.text);
+									_this2.props.addMessage(_this2.state.text);
 								}
 							},
 							"New message"
@@ -31653,7 +31655,7 @@ var PostMsg = function (_React$Component) {
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return { currentRoom: state.selectedRoom || null, error: state.errorObj };
+	return { error: state.errorObj };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -32030,6 +32032,12 @@ var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
 
+var _uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
+
+var _uuid2 = _interopRequireDefault(_uuid);
+
+var _selectors = __webpack_require__(/*! ./selectors */ "./src/selectors.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = /*#__PURE__*/_regenerator2.default.mark(getAllRooms),
@@ -32115,23 +32123,34 @@ function getMessages(action) {
 }
 
 function postMessage(action) {
-	var messages;
+	var currentRoom, messages;
 	return _regenerator2.default.wrap(function postMessage$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
 					_context3.next = 2;
-					return (0, _effects.call)(_axios2.default.post, "http://localhost:6060/api/" + action.payload + "/messages", {
-						text: msgText,
-						userId: 12345,
-						messageId: uuid.v4(),
-						roomId: action.payload.id
-					});
+					return (0, _effects.select)(_selectors.getCurrentRoom);
 
 				case 2:
-					messages = _context3.sent;
+					currentRoom = _context3.sent;
+					_context3.next = 5;
+					return (0, _effects.call)(_axios2.default.post, "http://localhost:6060/api/addmessage", {
+						text: action.payload,
+						userId: 12345,
+						messageId: _uuid2.default.v4(),
+						roomId: currentRoom.id
+					});
 
-				case 3:
+				case 5:
+					_context3.next = 7;
+					return (0, _effects.call)(_axios2.default.get, "http://localhost:6060/api/" + currentRoom.id + "/messages");
+
+				case 7:
+					messages = _context3.sent;
+					_context3.next = 10;
+					return (0, _effects.put)({ type: "ROOM_MSGS", payload: messages });
+
+				case 10:
 				case "end":
 					return _context3.stop();
 			}
@@ -32180,7 +32199,7 @@ function mySaga() {
 			switch (_context5.prev = _context5.next) {
 				case 0:
 					_context5.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)("GET_ROOMS", getAllRooms), (0, _effects.takeEvery)("GET_MESSAGES", getMessages), (0, _effects.takeLatest)("LOGIN_USER", loginUser)]);
+					return (0, _effects.all)([(0, _effects.takeEvery)("GET_ROOMS", getAllRooms), (0, _effects.takeEvery)("GET_MESSAGES", getMessages), (0, _effects.takeEvery)("POST_MESSAGE", postMessage), (0, _effects.takeLatest)("LOGIN_USER", loginUser)]);
 
 				case 2:
 				case "end":
@@ -32207,6 +32226,25 @@ function setError(errorObj) {
 }
 
 exports.default = mySaga;
+
+/***/ }),
+
+/***/ "./src/selectors.js":
+/*!**************************!*\
+  !*** ./src/selectors.js ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var getCurrentRoom = exports.getCurrentRoom = function getCurrentRoom(state) {
+  return state.selectedRoom;
+};
 
 /***/ }),
 
