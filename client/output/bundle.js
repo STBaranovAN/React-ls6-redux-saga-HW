@@ -31099,7 +31099,7 @@ var _uuid2 = _interopRequireDefault(_uuid);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getRooms() {
-	console.log("From action GET_ROOMS");
+	// console.log("From action GET_ROOMS");
 	return {
 		type: "GET_ROOMS",
 		payload: "http://localhost:6060/api"
@@ -31107,9 +31107,10 @@ function getRooms() {
 };
 
 function selectRoom(currentRoom) {
+	// console.log("From action GET_ROOMS");
 	return {
-		type: "ROOM_MSGS",
-		payload: currentRoom.id
+		type: "GET_MESSAGES",
+		payload: currentRoom
 	};
 };
 
@@ -31448,7 +31449,7 @@ var Messages = function (_React$Component) {
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return { allMessages: state.roomMessages, currentRoomName: state.selectedRoom && state.selectedRoom.name || null, error: state.errorObj };
+	return { allMessages: state.roomMessages && state.roomMessages.data || [], currentRoomName: state.selectedRoom && state.selectedRoom.name || null, error: state.errorObj };
 }
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Messages);
@@ -32044,35 +32045,33 @@ function getAllRooms(action) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
-					/// Worker Saga ///
-					console.log("From SAGA", action);
-					_context.prev = 1;
-					_context.next = 4;
+					_context.prev = 0;
+					_context.next = 3;
 					return (0, _effects.call)(_axios2.default.get, action.payload);
 
-				case 4:
+				case 3:
 					result = _context.sent;
-					_context.next = 7;
+					_context.next = 6;
 					return (0, _effects.put)({ type: "ALL_ROOMS", payload: result.data.chats });
 
-				case 7:
-					_context.next = 14;
+				case 6:
+					_context.next = 13;
 					break;
 
-				case 9:
-					_context.prev = 9;
-					_context.t0 = _context["catch"](1);
+				case 8:
+					_context.prev = 8;
+					_context.t0 = _context["catch"](0);
 
 					console.log(_context.t0);
-					_context.next = 14;
+					_context.next = 13;
 					return (0, _effects.put)({ type: "ERR_EXIST", payload: _context.t0 });
 
-				case 14:
+				case 13:
 				case "end":
 					return _context.stop();
 			}
 		}
-	}, _marked, this, [[1, 9]]);
+	}, _marked, this, [[0, 8]]);
 }
 
 function getMessages(action) {
@@ -32081,33 +32080,38 @@ function getMessages(action) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
-					_context2.prev = 0;
-					_context2.next = 3;
-					return (0, _effects.call)(_axios2.default.get, "http://localhost:6060/api/" + action.payload + "/messages");
+					console.log("From SAGA", action);
+					_context2.prev = 1;
+					_context2.next = 4;
+					return (0, _effects.put)({ type: "SEL_ROOM", payload: action.payload });
 
-				case 3:
-					messages = _context2.sent;
+				case 4:
 					_context2.next = 6;
-					return (0, _effects.put)({ type: "ROOM_MSGS", payload: messages });
+					return (0, _effects.call)(_axios2.default.get, "http://localhost:6060/api/" + action.payload.id + "/messages");
 
 				case 6:
-					_context2.next = 13;
+					messages = _context2.sent;
+					_context2.next = 9;
+					return (0, _effects.put)({ type: "ROOM_MSGS", payload: messages });
+
+				case 9:
+					_context2.next = 16;
 					break;
 
-				case 8:
-					_context2.prev = 8;
-					_context2.t0 = _context2["catch"](0);
+				case 11:
+					_context2.prev = 11;
+					_context2.t0 = _context2["catch"](1);
 
 					console.log(_context2.t0);
-					_context2.next = 13;
+					_context2.next = 16;
 					return (0, _effects.put)({ type: "ERR_EXIST", payload: _context2.t0 });
 
-				case 13:
+				case 16:
 				case "end":
 					return _context2.stop();
 			}
 		}
-	}, _marked2, this, [[0, 8]]);
+	}, _marked2, this, [[1, 11]]);
 }
 
 function postMessage(action) {
@@ -32203,21 +32207,6 @@ function setError(errorObj) {
 }
 
 exports.default = mySaga;
-
-///// npm install 
-///// babel-plugin-transform-runtime
-///// babel-runtime
-
-//// add file .babelrc 
-//// {
-//     "plugins": [
-//         ["transform-runtime",
-//         {
-//             "polyfill": false,
-//             "regenerator": true
-//         }]
-//     ]
-// }
 
 /***/ }),
 

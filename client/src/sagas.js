@@ -2,7 +2,7 @@ import { call, put, takeEvery, takeLatest, all } from "redux-saga/effects";
 import axios from "axios";
 
 function* getAllRooms(action){ /// Worker Saga ///
-	console.log("From SAGA", action);
+	// console.log("From SAGA", action);
 	try {
 		let result = yield call( axios.get, action.payload );
 		yield put({type: "ALL_ROOMS", payload: result.data.chats});
@@ -14,8 +14,10 @@ function* getAllRooms(action){ /// Worker Saga ///
 }
 
 function* getMessages(action){
+	console.log("From SAGA", action);
 	try {
-		let messages = yield call(axios.get, `http://localhost:6060/api/${action.payload}/messages`);
+		yield put({type: "SEL_ROOM", payload: action.payload});
+		let messages = yield call(axios.get, `http://localhost:6060/api/${action.payload.id}/messages`);
 		yield put({type: "ROOM_MSGS", payload: messages});
 	}
 	catch(err){
@@ -58,21 +60,5 @@ function* setError(errorObj){
 }
 
 export default mySaga;
-
-
-///// npm install 
-///// babel-plugin-transform-runtime
-///// babel-runtime
-
-//// add file .babelrc 
-//// {
-//     "plugins": [
-//         ["transform-runtime",
-//         {
-//             "polyfill": false,
-//             "regenerator": true
-//         }]
-//     ]
-// }
 
 

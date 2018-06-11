@@ -1,7 +1,7 @@
 import uuid from "uuid";
 
 export function getRooms(){
-	console.log("From action GET_ROOMS");
+	// console.log("From action GET_ROOMS");
 	return {
 		type: "GET_ROOMS",
 		payload: "http://localhost:6060/api"
@@ -9,9 +9,10 @@ export function getRooms(){
 };
 
 export function selectRoom(currentRoom){
+	// console.log("From action GET_ROOMS");
 	return {
-		type: "ROOM_MSGS",
-		payload: currentRoom.id
+		type: "GET_MESSAGES",
+		payload: currentRoom
 	}
 };
 

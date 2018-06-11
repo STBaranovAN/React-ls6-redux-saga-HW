@@ -47,7 +47,7 @@ class Messages extends React.Component {
 }
 
 function mapStateToProps(state){
-	return {allMessages: state.roomMessages, currentRoomName: (state.selectedRoom && state.selectedRoom.name) || null, error: state.errorObj}
+	return {allMessages: (state.roomMessages && state.roomMessages.data) || [], currentRoomName: (state.selectedRoom && state.selectedRoom.name) || null, error: state.errorObj}
 }
 
 export default connect(mapStateToProps)(Messages);
