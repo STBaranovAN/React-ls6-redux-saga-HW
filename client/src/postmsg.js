@@ -59,7 +59,6 @@ class PostMsg extends React.Component {
 	render() {
 
 		let err = this.props.error;
-		let currentRoom = this.props.currentRoom || {};
 
 		return (
 			<div className="container msgform">
@@ -67,7 +66,7 @@ class PostMsg extends React.Component {
 					<div className="col">&nbsp;</div>
 				</div>
 				<div className="row" style={ {display: (err && err.where === "addMessage") ? "block" : "none"} }>
-					<div className="col"><p className="error">err.text</p></div>
+					<div className="col"><p className="error">{err && err.text}</p></div>
 				</div>
 				<div className="row">
 					<div className="col">

@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getRooms, selectRoom } from "./actions/actions";
 import Room from "./item";
-import Messages from "./messages";
-import PostMsg from "./postmsg";
 
 class Rooms extends React.Component {
 	constructor(props){

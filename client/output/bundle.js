@@ -31089,27 +31089,28 @@ Object.defineProperty(exports, "__esModule", {
 exports.getRooms = getRooms;
 exports.selectRoom = selectRoom;
 exports.addMessage = addMessage;
-exports.login = login;
 exports.throwError = throwError;
 
 var _uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
+var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getRooms() {
 	// console.log("From action GET_ROOMS");
 	return {
-		type: "GET_ROOMS",
-		payload: "http://localhost:6060/api"
+		type: _constants.GET_ROOMS,
+		payload: _constants.API_URL
 	};
 };
 
 function selectRoom(currentRoom) {
 	// console.log("From action GET_ROOMS");
 	return {
-		type: "GET_MESSAGES",
+		type: _constants.GET_MESSAGES,
 		payload: currentRoom
 	};
 };
@@ -31121,7 +31122,7 @@ function addMessage(msgText) {
 	// 	if(!msgText)
 	// 	{
 	// 		dispatch({
-	// 			type: "ERR_EXIST",
+	// 			type: ERR_EXIST,
 	// 			payload: { where: "addMessage", text: "Enter message text!" }
 	// 		});
 	// 		return;
@@ -31142,21 +31143,21 @@ function addMessage(msgText) {
 	// 		});
 	// }
 	return {
-		type: "POST_MESSAGE",
+		type: _constants.POST_MESSAGE,
 		payload: msgText
 	};
 };
 
-function login(userData) {
-	return {
-		type: "LOGIN_USER",
-		payload: userData
-	};
-};
+// export function login(userData){
+// 	return {
+// 		type: "LOGIN_USER",
+// 		payload: userData
+// 	}
+// };
 
 function throwError(errorObj) {
 	return {
-		type: "ERR_EXIST",
+		type: _constants.ERR_EXIST,
 		payload: errorObj
 	};
 };
@@ -31216,6 +31217,35 @@ _reactDom2.default.render(_react2.default.createElement(
   { store: store },
   _react2.default.createElement(_main2.default, null)
 ), document.getElementById("container"));
+
+/***/ }),
+
+/***/ "./src/constants/constants.js":
+/*!************************************!*\
+  !*** ./src/constants/constants.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ALL_ROOMS = exports.ALL_ROOMS = 'ALL_ROOMS';
+var ERROR = exports.ERROR = 'ERROR';
+var ROOM_MSGS = exports.ROOM_MSGS = 'ROOM_MSGS';
+var SEL_ROOM = exports.SEL_ROOM = 'SEL_ROOM';
+
+var GET_ROOMS = exports.GET_ROOMS = 'GET_ROOMS';
+var GET_MESSAGES = exports.GET_MESSAGES = 'GET_MESSAGES';
+var POST_MESSAGE = exports.POST_MESSAGE = 'POST_MESSAGE';
+var ERR_EXIST = exports.ERR_EXIST = 'ERR_EXIST';
+
+var API_URL = exports.API_URL = 'http://localhost:6060/api';
+var API_URL_POST = exports.API_URL_POST = 'http://localhost:6060/api/addmessage';
+var USER_ID = exports.USER_ID = 12345;
 
 /***/ }),
 
@@ -31573,7 +31603,6 @@ var PostMsg = function (_React$Component) {
 			var _this2 = this;
 
 			var err = this.props.error;
-			var currentRoom = this.props.currentRoom || {};
 
 			return _react2.default.createElement(
 				"div",
@@ -31596,7 +31625,7 @@ var PostMsg = function (_React$Component) {
 						_react2.default.createElement(
 							"p",
 							{ className: "error" },
-							"err.text"
+							err && err.text
 						)
 					)
 				),
@@ -31686,11 +31715,13 @@ exports.default = function () {
 
 	console.log("From reducer", action);
 	switch (action.type) {
-		case "ALL_ROOMS":
+		case _constants.ALL_ROOMS:
 			return action.payload;
 	}
 	return state;
 };
+
+var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
 
 /***/ }),
 
@@ -31714,11 +31745,13 @@ exports.default = function () {
 
 	console.log("From reducer", action);
 	switch (action.type) {
-		case "ERR_EXIST":
+		case _constants.ERR_EXIST:
 			return action.payload;
 	}
 	return state;
 };
+
+var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
 
 /***/ }),
 
@@ -31742,11 +31775,13 @@ exports.default = function () {
 
 	console.log("From reducer", action);
 	switch (action.type) {
-		case "ROOM_MSGS":
+		case _constants.ROOM_MSGS:
 			return action.payload;
 	}
 	return state;
 };
+
+var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
 
 /***/ }),
 
@@ -31770,39 +31805,13 @@ exports.default = function () {
 
 	console.log("From reducer", action);
 	switch (action.type) {
-		case "SEL_ROOM":
+		case _constants.SEL_ROOM:
 			return action.payload;
 	}
 	return state;
 };
 
-/***/ }),
-
-/***/ "./src/reducers/tokenreducer.js":
-/*!**************************************!*\
-  !*** ./src/reducers/tokenreducer.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-exports.default = function () {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	var action = arguments[1];
-
-	console.log("From reducer", action);
-	switch (action.type) {
-		case "USER_TOKEN":
-			return action.payload;
-	}
-	return state;
-};
+var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
 
 /***/ }),
 
@@ -31849,14 +31858,6 @@ var _actions = __webpack_require__(/*! ./actions/actions */ "./src/actions/actio
 var _item = __webpack_require__(/*! ./item */ "./src/item.js");
 
 var _item2 = _interopRequireDefault(_item);
-
-var _messages = __webpack_require__(/*! ./messages */ "./src/messages.js");
-
-var _messages2 = _interopRequireDefault(_messages);
-
-var _postmsg = __webpack_require__(/*! ./postmsg */ "./src/postmsg.js");
-
-var _postmsg2 = _interopRequireDefault(_postmsg);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31974,20 +31975,17 @@ var _errorreducer = __webpack_require__(/*! ./reducers/errorreducer */ "./src/re
 
 var _errorreducer2 = _interopRequireDefault(_errorreducer);
 
-var _tokenreducer = __webpack_require__(/*! ./reducers/tokenreducer */ "./src/reducers/tokenreducer.js");
-
-var _tokenreducer2 = _interopRequireDefault(_tokenreducer);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import tokenReducer from "./reducers/tokenreducer";
 //import authReducer from "./authreducer";
 
 var rootReducer = (0, _redux.combineReducers)({
 	allRooms: _allroomsreducer2.default,
 	selectedRoom: _selroomreducer2.default,
 	roomMessages: _msgreducer2.default,
-	errorObj: _errorreducer2.default,
-	token: _tokenreducer2.default
+	errorObj: _errorreducer2.default
+	// token: tokenReducer
 
 	// rooms: {
 	// 	allRooms: [],
@@ -32036,6 +32034,8 @@ var _uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
 
 var _uuid2 = _interopRequireDefault(_uuid);
 
+var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
+
 var _selectors = __webpack_require__(/*! ./selectors */ "./src/selectors.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -32043,9 +32043,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _marked = /*#__PURE__*/_regenerator2.default.mark(getAllRooms),
     _marked2 = /*#__PURE__*/_regenerator2.default.mark(getMessages),
     _marked3 = /*#__PURE__*/_regenerator2.default.mark(postMessage),
-    _marked4 = /*#__PURE__*/_regenerator2.default.mark(loginUser),
-    _marked5 = /*#__PURE__*/_regenerator2.default.mark(mySaga),
-    _marked6 = /*#__PURE__*/_regenerator2.default.mark(setError);
+    _marked4 = /*#__PURE__*/_regenerator2.default.mark(mySaga),
+    _marked5 = /*#__PURE__*/_regenerator2.default.mark(setError);
 
 function getAllRooms(action) {
 	var result;
@@ -32060,7 +32059,7 @@ function getAllRooms(action) {
 				case 3:
 					result = _context.sent;
 					_context.next = 6;
-					return (0, _effects.put)({ type: "ALL_ROOMS", payload: result.data.chats });
+					return (0, _effects.put)({ type: _constants.ALL_ROOMS, payload: result.data.chats });
 
 				case 6:
 					_context.next = 13;
@@ -32072,7 +32071,7 @@ function getAllRooms(action) {
 
 					console.log(_context.t0);
 					_context.next = 13;
-					return (0, _effects.put)({ type: "ERR_EXIST", payload: _context.t0 });
+					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "getRooms", text: "Server error!" } });
 
 				case 13:
 				case "end":
@@ -32091,7 +32090,7 @@ function getMessages(action) {
 					console.log("From SAGA", action);
 					_context2.prev = 1;
 					_context2.next = 4;
-					return (0, _effects.put)({ type: "SEL_ROOM", payload: action.payload });
+					return (0, _effects.put)({ type: _constants.SEL_ROOM, payload: action.payload });
 
 				case 4:
 					_context2.next = 6;
@@ -32100,7 +32099,7 @@ function getMessages(action) {
 				case 6:
 					messages = _context2.sent;
 					_context2.next = 9;
-					return (0, _effects.put)({ type: "ROOM_MSGS", payload: messages });
+					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: messages });
 
 				case 9:
 					_context2.next = 16;
@@ -32112,7 +32111,7 @@ function getMessages(action) {
 
 					console.log(_context2.t0);
 					_context2.next = 16;
-					return (0, _effects.put)({ type: "ERR_EXIST", payload: _context2.t0 });
+					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "selectRoom", text: "Server error!" } });
 
 				case 16:
 				case "end":
@@ -32128,78 +32127,100 @@ function postMessage(action) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
-					_context3.next = 2;
+					if (action.payload) {
+						_context3.next = 4;
+						break;
+					}
+
+					_context3.next = 3;
+					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "addMessage", text: "Enter message text!" } });
+
+				case 3:
+					return _context3.abrupt("return");
+
+				case 4:
+					_context3.next = 6;
 					return (0, _effects.select)(_selectors.getCurrentRoom);
 
-				case 2:
+				case 6:
 					currentRoom = _context3.sent;
-					_context3.next = 5;
-					return (0, _effects.call)(_axios2.default.post, "http://localhost:6060/api/addmessage", {
+					_context3.prev = 7;
+					_context3.next = 10;
+					return (0, _effects.call)(_axios2.default.post, _constants.API_URL_POST, {
 						text: action.payload,
-						userId: 12345,
+						userId: _constants.USER_ID,
 						messageId: _uuid2.default.v4(),
 						roomId: currentRoom.id
 					});
 
-				case 5:
-					_context3.next = 7;
+				case 10:
+					_context3.next = 12;
 					return (0, _effects.call)(_axios2.default.get, "http://localhost:6060/api/" + currentRoom.id + "/messages");
 
-				case 7:
+				case 12:
 					messages = _context3.sent;
-					_context3.next = 10;
-					return (0, _effects.put)({ type: "ROOM_MSGS", payload: messages });
+					_context3.next = 15;
+					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: messages });
 
-				case 10:
+				case 15:
+					_context3.next = 23;
+					break;
+
+				case 17:
+					_context3.prev = 17;
+					_context3.t0 = _context3["catch"](7);
+
+					console.log(_context3.t0);
+					_context3.next = 22;
+					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: _context3.t0 });
+
+				case 22:
+					setError(_constants.ERR_EXIST, _context3.t0);
+
+				case 23:
 				case "end":
 					return _context3.stop();
 			}
 		}
-	}, _marked3, this);
+	}, _marked3, this, [[7, 17]]);
 }
 
-function loginUser(action) {
-	var token;
-	return _regenerator2.default.wrap(function loginUser$(_context4) {
+// function* loginUser(action){
+// 	try {
+// 		let token = yield call(axios.post, "http://localhost:6060/api/auth", JSON.stringify(action.payload), {"Content-Type":"application/json"});
+// 		localStorage.sagaToken = JSON.stringify(token);
+// 		yield put({type: "USER_TOKEN", payload: token});
+// 	}
+// 	catch(err){
+// 		yield put({type: "USER_TOKEN", payload: null});
+// 	}
+// }
+
+function mySaga() {
+	return _regenerator2.default.wrap(function mySaga$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
-					_context4.prev = 0;
-					_context4.next = 3;
-					return (0, _effects.call)(_axios2.default.post, "http://localhost:6060/api/auth", JSON.stringify(action.payload), { "Content-Type": "application/json" });
+					_context4.next = 2;
+					return (0, _effects.all)([(0, _effects.takeEvery)(_constants.GET_ROOMS, getAllRooms), (0, _effects.takeEvery)(_constants.GET_MESSAGES, getMessages), (0, _effects.takeEvery)(_constants.POST_MESSAGE, postMessage)
+					// takeLatest(LOGIN_USER, loginUser)
+					]);
 
-				case 3:
-					token = _context4.sent;
-
-					localStorage.sagaToken = JSON.stringify(token);
-					_context4.next = 7;
-					return (0, _effects.put)({ type: "USER_TOKEN", payload: token });
-
-				case 7:
-					_context4.next = 13;
-					break;
-
-				case 9:
-					_context4.prev = 9;
-					_context4.t0 = _context4["catch"](0);
-					_context4.next = 13;
-					return (0, _effects.put)({ type: "USER_TOKEN", payload: null });
-
-				case 13:
+				case 2:
 				case "end":
 					return _context4.stop();
 			}
 		}
-	}, _marked4, this, [[0, 9]]);
+	}, _marked4, this);
 }
 
-function mySaga() {
-	return _regenerator2.default.wrap(function mySaga$(_context5) {
+function setError(type, errorObj) {
+	return _regenerator2.default.wrap(function setError$(_context5) {
 		while (1) {
 			switch (_context5.prev = _context5.next) {
 				case 0:
 					_context5.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)("GET_ROOMS", getAllRooms), (0, _effects.takeEvery)("GET_MESSAGES", getMessages), (0, _effects.takeEvery)("POST_MESSAGE", postMessage), (0, _effects.takeLatest)("LOGIN_USER", loginUser)]);
+					return (0, _effects.put)({ type: type, payload: errorObj });
 
 				case 2:
 				case "end":
@@ -32207,22 +32228,6 @@ function mySaga() {
 			}
 		}
 	}, _marked5, this);
-}
-
-function setError(errorObj) {
-	return _regenerator2.default.wrap(function setError$(_context6) {
-		while (1) {
-			switch (_context6.prev = _context6.next) {
-				case 0:
-					_context6.next = 2;
-					return (0, _effects.put)({ type: "ROOM_MSGS", payload: errorObj });
-
-				case 2:
-				case "end":
-					return _context6.stop();
-			}
-		}
-	}, _marked6, this);
 }
 
 exports.default = mySaga;
