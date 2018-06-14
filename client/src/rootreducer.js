@@ -1,17 +1,12 @@
 import { combineReducers } from "redux";
 import allRoomsReducer from "./reducers/allroomsreducer";
-import selRoomReducer from "./reducers/selroomreducer";
 import msgReducer from "./reducers/msgreducer";
-import errorReducer from "./reducers/errorreducer";
-// import tokenReducer from "./reducers/tokenreducer";
-//import authReducer from "./authreducer";
+import postMsgReducer from "./reducers/postmsgreducer";
 
 let rootReducer = combineReducers({
-	allRooms: allRoomsReducer,
-	selectedRoom: selRoomReducer,
-	roomMessages: msgReducer,
-	errorObj: errorReducer
-	// token: tokenReducer
+	rooms: allRoomsReducer,
+	msgs: msgReducer,
+	postmsg: postMsgReducer
 
 	// rooms: {
 	// 	allRooms: [],

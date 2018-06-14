@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getRooms, selectRoom } from "./actions/actions";
 import Room from "./item";
+import { no_room_msg } from "./constants/constants";
 
 class Rooms extends React.Component {
 	constructor(props){
@@ -17,44 +18,44 @@ class Rooms extends React.Component {
 	}
 	
 	render() {
-		let err = this.props.error;
-		let allRooms = this.props.chatRooms || [];
+		let err = this.props.chatRooms.err;
+		let allRooms = this.props.chatRooms.allRooms || [];
 
-		if(err && err.where === "getRooms")		
+		if(err)		
 		{
 			return (<div className="rooms">
-						<h2>{err.text}</h2>
+						<h2>{err}</h2>
 					</div>
 			)
 		}
 		
-		if(allRooms.length == 0) {
-			return (<div className="rooms">
-						<h2>No rooms...</h2>
-					</div>
+		if(allRooms.length > 0) {
+			return (
+				<div className="rooms">
+							<h2>All rooms:</h2>
+							<ul>
+								{allRooms.map((item, index) => {
+									return <Room
+											key={index} name={item.name} 
+											onClick={() => { 
+												this.props.selectRoom(item);
+											}}
+										/>
+								})
+							}
+							</ul>	
+				</div>
 			)
+		} else {
+			return (<div className="rooms">
+						<h2>{no_room_msg}</h2>
+					</div>)
 		}
-
-		return (
-			<div className="rooms">
-						<ul>
-							{allRooms.map((item, index) => {
-								return <Room
-										key={index} name={item.name} 
-										onClick={() => { 
-											this.props.selectRoom(item);
-										}}
-									/>
-							})
-						}
-						</ul>	
-			</div>
-		)
 	}
 }
 
 function mapStateToProps(state){
-	return {chatRooms: state.allRooms, error: state.errorObj}
+	return {chatRooms: state.rooms}
 }
 
 function mapDispatchToProps(dispatch){

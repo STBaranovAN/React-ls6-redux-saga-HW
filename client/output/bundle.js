@@ -31089,15 +31089,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.getRooms = getRooms;
 exports.selectRoom = selectRoom;
 exports.addMessage = addMessage;
-exports.throwError = throwError;
-
-var _uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/index.js");
-
-var _uuid2 = _interopRequireDefault(_uuid);
 
 var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getRooms() {
 	// console.log("From action GET_ROOMS");
@@ -31108,57 +31101,16 @@ function getRooms() {
 };
 
 function selectRoom(currentRoom) {
-	// console.log("From action GET_ROOMS");
 	return {
 		type: _constants.GET_MESSAGES,
 		payload: currentRoom
 	};
 };
 
-function addMessage(msgText) {
-
-	// return function(dispatch){
-
-	// 	if(!msgText)
-	// 	{
-	// 		dispatch({
-	// 			type: ERR_EXIST,
-	// 			payload: { where: "addMessage", text: "Enter message text!" }
-	// 		});
-	// 		return;
-	// 	}
-
-	// 	axios.post("http://localhost:6060/api/addmessage", {
-	// 		text: msgText,
-	// 		userId: 12345,
-	// 		messageId: uuid.v4(),
-	// 		roomId: currentRoom.id 
-	// 		}).then( responseObj => {
-	// 			dispatch(selectRoom(currentRoom));
-	// 		}, err => {
-	// 			dispatch({
-	// 				type: "ERR_EXIST",
-	// 				payload: { where: "addMessage", text: "Server error occured..." }
-	// 			});
-	// 		});
-	// }
+function addMessage(text) {
 	return {
 		type: _constants.POST_MESSAGE,
-		payload: msgText
-	};
-};
-
-// export function login(userData){
-// 	return {
-// 		type: "LOGIN_USER",
-// 		payload: userData
-// 	}
-// };
-
-function throwError(errorObj) {
-	return {
-		type: _constants.ERR_EXIST,
-		payload: errorObj
+		payload: text
 	};
 };
 
@@ -31234,18 +31186,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var ALL_ROOMS = exports.ALL_ROOMS = 'ALL_ROOMS';
-var ERROR = exports.ERROR = 'ERROR';
 var ROOM_MSGS = exports.ROOM_MSGS = 'ROOM_MSGS';
-var SEL_ROOM = exports.SEL_ROOM = 'SEL_ROOM';
+var POST_MSG = exports.POST_MSG = 'POST_MSG';
 
 var GET_ROOMS = exports.GET_ROOMS = 'GET_ROOMS';
 var GET_MESSAGES = exports.GET_MESSAGES = 'GET_MESSAGES';
 var POST_MESSAGE = exports.POST_MESSAGE = 'POST_MESSAGE';
-var ERR_EXIST = exports.ERR_EXIST = 'ERR_EXIST';
 
 var API_URL = exports.API_URL = 'http://localhost:6060/api';
 var API_URL_POST = exports.API_URL_POST = 'http://localhost:6060/api/addmessage';
 var USER_ID = exports.USER_ID = 12345;
+
+var rooms_title = exports.rooms_title = "All rooms:";
+var server_error_msg = exports.server_error_msg = "Server error occured...";
+var emty_text_error_msg = exports.emty_text_error_msg = "Enter message text!";
+var no_room_msg = exports.no_room_msg = "No rooms...";
+var no_msgs_msg = exports.no_msgs_msg = "No messages in room...";
+var choose_room_msg = exports.choose_room_msg = "Enter message text!";
+var btn_new_msg = exports.btn_new_msg = "New message";
+var tf_new_msg = exports.tf_new_msg = "Enter your message";
 
 /***/ }),
 
@@ -31407,6 +31366,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
+var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Messages = function (_React$Component) {
@@ -31430,61 +31391,61 @@ var Messages = function (_React$Component) {
 		key: "render",
 		value: function render() {
 
-			var err = this.props.error;
-			var roomName = this.props.currentRoomName || "Choose a room";
-			var roomMessages = this.props.allMessages || [];
+			var err = this.props.msgs.err;
+			var roomName = this.props.msgs.selectedRoom && this.props.msgs.selectedRoom.name || _constants.choose_room_msg;
+			var roomMessages = this.props.msgs.roomMessages || [];
 
-			if (err && err.where === "selectRoom") {
+			if (err) {
 				return _react2.default.createElement(
 					"div",
 					{ className: "messages" },
 					_react2.default.createElement(
 						"h2",
 						null,
-						err.text
+						err
 					)
 				);
 			}
 
-			if (roomMessages.length == 0) {
+			if (roomMessages.length > 0) {
 				return _react2.default.createElement(
 					"div",
 					{ className: "messages" },
 					_react2.default.createElement(
 						"h2",
 						null,
-						"No messages in room..."
+						roomName
+					),
+					_react2.default.createElement(
+						"div",
+						{ className: "text-right" },
+						roomMessages.map(function (item, index) {
+							return _react2.default.createElement(
+								"p",
+								{ key: index },
+								item.text
+							);
+						})
+					)
+				);
+			} else {
+				return _react2.default.createElement(
+					"div",
+					{ className: "messages" },
+					_react2.default.createElement(
+						"h2",
+						null,
+						_constants.no_msgs_msg
 					)
 				);
 			}
-
-			return _react2.default.createElement(
-				"div",
-				{ className: "messages" },
-				_react2.default.createElement(
-					"h2",
-					null,
-					roomName
-				),
-				_react2.default.createElement(
-					"div",
-					{ className: "text-right" },
-					roomMessages.map(function (item, index) {
-						return _react2.default.createElement(
-							"p",
-							{ key: index },
-							item.text
-						);
-					})
-				)
-			);
 		}
 	}]);
 	return Messages;
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return { allMessages: state.roomMessages && state.roomMessages.data || [], currentRoomName: state.selectedRoom && state.selectedRoom.name || null, error: state.errorObj };
+	return { msgs: state.msgs };
 }
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(Messages);
@@ -31529,18 +31490,15 @@ var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-r
 
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
 var _actions = __webpack_require__(/*! ./actions/actions */ "./src/actions/actions.js");
+
+var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import {Component} from "react";
 
 
-// import uuid from "uuid";
 var PostMsg = function (_React$Component) {
 	(0, _inherits3.default)(PostMsg, _React$Component);
 
@@ -31554,7 +31512,6 @@ var PostMsg = function (_React$Component) {
 		};
 
 		_this.getText = _this.getText.bind(_this);
-		// this.postNewMessage = this.postNewMessage.bind(this);
 		return _this;
 	}
 
@@ -31563,46 +31520,12 @@ var PostMsg = function (_React$Component) {
 		value: function getText(e) {
 			this.setState({ text: e.target.value });
 		}
-
-		// postNewMessage(e){
-
-		// 	let msgText = this.state.msgText;
-		// 	if(!msgText)
-		// 	{
-		// 		// alert("Enter message text!");
-		// 		// this.setState({err: true});
-		// 		return;
-		// 	}
-
-		// 	let currentRoom = this.props.currentRoom;
-
-		// 	axios.post(confObj.api_url_post, {
-		// 		text: msgText,
-		// 		userId: confObj.userId,
-		// 		messageId: uuid.v4(),
-		// 		roomId: currentRoom.id 
-		// 		}).then( responseObj => {
-		// 			this.props.selectRoom(currentRoom)
-		// 			// this.setState({
-		// 			// 	msgText: "",
-		// 			// 	err: false
-		// 			// }); 
-		// 		}, err => {
-		// 		// this.setState({err: true}, () => {
-		// 		// 	console.log(err);
-		// 		// 	this.setState({
-		// 		// 		err: true
-		// 		// 	}); 
-		// 		// })
-		// 	});
-		// }
-
 	}, {
 		key: "render",
 		value: function render() {
 			var _this2 = this;
 
-			var err = this.props.error;
+			var err = this.props.err;
 
 			return _react2.default.createElement(
 				"div",
@@ -31618,14 +31541,14 @@ var PostMsg = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					"div",
-					{ className: "row", style: { display: err && err.where === "addMessage" ? "block" : "none" } },
+					{ className: "row", style: { display: err ? "block" : "none" } },
 					_react2.default.createElement(
 						"div",
 						{ className: "col" },
 						_react2.default.createElement(
 							"p",
 							{ className: "error" },
-							err && err.text
+							err
 						)
 					)
 				),
@@ -31664,7 +31587,7 @@ var PostMsg = function (_React$Component) {
 									_this2.props.addMessage(_this2.state.text);
 								}
 							},
-							"New message"
+							_constants.btn_new_msg
 						)
 					)
 				),
@@ -31684,7 +31607,7 @@ var PostMsg = function (_React$Component) {
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return { error: state.errorObj };
+	return { currentRoom: state.msgs.selectedRoom || null, err: state.postmsg.err };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -31710,43 +31633,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { allRooms: null, err: null };
 	var action = arguments[1];
 
 	console.log("From reducer", action);
 	switch (action.type) {
 		case _constants.ALL_ROOMS:
-			return action.payload;
-	}
-	return state;
-};
-
-var _constants = __webpack_require__(/*! ../constants/constants */ "./src/constants/constants.js");
-
-/***/ }),
-
-/***/ "./src/reducers/errorreducer.js":
-/*!**************************************!*\
-  !*** ./src/reducers/errorreducer.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-exports.default = function () {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-	var action = arguments[1];
-
-	console.log("From reducer", action);
-	switch (action.type) {
-		case _constants.ERR_EXIST:
-			return action.payload;
+			return Object.assign({}, state, action.payload);
 	}
 	return state;
 };
@@ -31770,13 +31663,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { selectedRoom: null, roomMessages: null, err: null };
 	var action = arguments[1];
 
 	console.log("From reducer", action);
 	switch (action.type) {
 		case _constants.ROOM_MSGS:
-			return action.payload;
+			return Object.assign({}, state, action.payload);
 	}
 	return state;
 };
@@ -31785,9 +31678,9 @@ var _constants = __webpack_require__(/*! ../constants/constants */ "./src/consta
 
 /***/ }),
 
-/***/ "./src/reducers/selroomreducer.js":
+/***/ "./src/reducers/postmsgreducer.js":
 /*!****************************************!*\
-  !*** ./src/reducers/selroomreducer.js ***!
+  !*** ./src/reducers/postmsgreducer.js ***!
   \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -31800,13 +31693,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { err: null };
 	var action = arguments[1];
 
 	console.log("From reducer", action);
 	switch (action.type) {
-		case _constants.SEL_ROOM:
-			return action.payload;
+		case _constants.POST_MSG:
+			return {
+				err: action.payload
+			};
 	}
 	return state;
 };
@@ -31859,6 +31754,8 @@ var _item = __webpack_require__(/*! ./item */ "./src/item.js");
 
 var _item2 = _interopRequireDefault(_item);
 
+var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Rooms = function (_React$Component) {
@@ -31883,56 +31780,61 @@ var Rooms = function (_React$Component) {
 		value: function render() {
 			var _this2 = this;
 
-			var err = this.props.error;
-			var allRooms = this.props.chatRooms || [];
+			var err = this.props.chatRooms.err;
+			var allRooms = this.props.chatRooms.allRooms || [];
 
-			if (err && err.where === "getRooms") {
+			if (err) {
 				return _react2.default.createElement(
 					"div",
 					{ className: "rooms" },
 					_react2.default.createElement(
 						"h2",
 						null,
-						err.text
+						err
 					)
 				);
 			}
 
-			if (allRooms.length == 0) {
+			if (allRooms.length > 0) {
 				return _react2.default.createElement(
 					"div",
 					{ className: "rooms" },
 					_react2.default.createElement(
 						"h2",
 						null,
-						"No rooms..."
+						"All rooms:"
+					),
+					_react2.default.createElement(
+						"ul",
+						null,
+						allRooms.map(function (item, index) {
+							return _react2.default.createElement(_item2.default, {
+								key: index, name: item.name,
+								onClick: function onClick() {
+									_this2.props.selectRoom(item);
+								}
+							});
+						})
+					)
+				);
+			} else {
+				return _react2.default.createElement(
+					"div",
+					{ className: "rooms" },
+					_react2.default.createElement(
+						"h2",
+						null,
+						_constants.no_room_msg
 					)
 				);
 			}
-
-			return _react2.default.createElement(
-				"div",
-				{ className: "rooms" },
-				_react2.default.createElement(
-					"ul",
-					null,
-					allRooms.map(function (item, index) {
-						return _react2.default.createElement(_item2.default, {
-							key: index, name: item.name,
-							onClick: function onClick() {
-								_this2.props.selectRoom(item);
-							}
-						});
-					})
-				)
-			);
 		}
 	}]);
 	return Rooms;
 }(_react2.default.Component);
 
 function mapStateToProps(state) {
-	return { chatRooms: state.allRooms, error: state.errorObj };
+	return { chatRooms: state.rooms };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -31963,29 +31865,20 @@ var _allroomsreducer = __webpack_require__(/*! ./reducers/allroomsreducer */ "./
 
 var _allroomsreducer2 = _interopRequireDefault(_allroomsreducer);
 
-var _selroomreducer = __webpack_require__(/*! ./reducers/selroomreducer */ "./src/reducers/selroomreducer.js");
-
-var _selroomreducer2 = _interopRequireDefault(_selroomreducer);
-
 var _msgreducer = __webpack_require__(/*! ./reducers/msgreducer */ "./src/reducers/msgreducer.js");
 
 var _msgreducer2 = _interopRequireDefault(_msgreducer);
 
-var _errorreducer = __webpack_require__(/*! ./reducers/errorreducer */ "./src/reducers/errorreducer.js");
+var _postmsgreducer = __webpack_require__(/*! ./reducers/postmsgreducer */ "./src/reducers/postmsgreducer.js");
 
-var _errorreducer2 = _interopRequireDefault(_errorreducer);
+var _postmsgreducer2 = _interopRequireDefault(_postmsgreducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import tokenReducer from "./reducers/tokenreducer";
-//import authReducer from "./authreducer";
-
 var rootReducer = (0, _redux.combineReducers)({
-	allRooms: _allroomsreducer2.default,
-	selectedRoom: _selroomreducer2.default,
-	roomMessages: _msgreducer2.default,
-	errorObj: _errorreducer2.default
-	// token: tokenReducer
+	rooms: _allroomsreducer2.default,
+	msgs: _msgreducer2.default,
+	postmsg: _postmsgreducer2.default
 
 	// rooms: {
 	// 	allRooms: [],
@@ -32043,8 +31936,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _marked = /*#__PURE__*/_regenerator2.default.mark(getAllRooms),
     _marked2 = /*#__PURE__*/_regenerator2.default.mark(getMessages),
     _marked3 = /*#__PURE__*/_regenerator2.default.mark(postMessage),
-    _marked4 = /*#__PURE__*/_regenerator2.default.mark(mySaga),
-    _marked5 = /*#__PURE__*/_regenerator2.default.mark(setError);
+    _marked4 = /*#__PURE__*/_regenerator2.default.mark(mySaga);
 
 function getAllRooms(action) {
 	var result;
@@ -32059,7 +31951,7 @@ function getAllRooms(action) {
 				case 3:
 					result = _context.sent;
 					_context.next = 6;
-					return (0, _effects.put)({ type: _constants.ALL_ROOMS, payload: result.data.chats });
+					return (0, _effects.put)({ type: _constants.ALL_ROOMS, payload: { allRooms: result.data.chats, err: null } });
 
 				case 6:
 					_context.next = 13;
@@ -32071,7 +31963,7 @@ function getAllRooms(action) {
 
 					console.log(_context.t0);
 					_context.next = 13;
-					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "getRooms", text: "Server error!" } });
+					return (0, _effects.put)({ type: _constants.ALL_ROOMS, payload: { allRooms: null, err: _constants.server_error_msg } });
 
 				case 13:
 				case "end":
@@ -32090,36 +31982,34 @@ function getMessages(action) {
 					console.log("From SAGA", action);
 					_context2.prev = 1;
 					_context2.next = 4;
-					return (0, _effects.put)({ type: _constants.SEL_ROOM, payload: action.payload });
-
-				case 4:
-					_context2.next = 6;
 					return (0, _effects.call)(_axios2.default.get, "http://localhost:6060/api/" + action.payload.id + "/messages");
 
-				case 6:
+				case 4:
 					messages = _context2.sent;
-					_context2.next = 9;
-					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: messages });
+					_context2.next = 7;
+					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: { selectedRoom: action.payload, roomMessages: messages.data, err: null } });
 
-				case 9:
-					_context2.next = 16;
+				case 7:
+					_context2.next = 14;
 					break;
 
-				case 11:
-					_context2.prev = 11;
+				case 9:
+					_context2.prev = 9;
 					_context2.t0 = _context2["catch"](1);
 
 					console.log(_context2.t0);
-					_context2.next = 16;
-					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "selectRoom", text: "Server error!" } });
+					_context2.next = 14;
+					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: { selectedRoom: action.payload, roomMessages: null, err: _constants.server_error_msg } });
 
-				case 16:
+				case 14:
 				case "end":
 					return _context2.stop();
 			}
 		}
-	}, _marked2, this, [[1, 11]]);
+	}, _marked2, this, [[1, 9]]);
 }
+
+//currentRoom, text
 
 function postMessage(action) {
 	var currentRoom, messages;
@@ -32133,7 +32023,7 @@ function postMessage(action) {
 					}
 
 					_context3.next = 3;
-					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: { where: "addMessage", text: "Enter message text!" } });
+					return (0, _effects.put)({ type: _constants.POST_MSG, payload: _constants.emty_text_error_msg });
 
 				case 3:
 					return _context3.abrupt("return");
@@ -32160,10 +32050,10 @@ function postMessage(action) {
 				case 12:
 					messages = _context3.sent;
 					_context3.next = 15;
-					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: messages });
+					return (0, _effects.put)({ type: _constants.ROOM_MSGS, payload: { selectedRoom: currentRoom, roomMessages: messages.data, err: null } });
 
 				case 15:
-					_context3.next = 23;
+					_context3.next = 22;
 					break;
 
 				case 17:
@@ -32172,12 +32062,9 @@ function postMessage(action) {
 
 					console.log(_context3.t0);
 					_context3.next = 22;
-					return (0, _effects.put)({ type: _constants.ERR_EXIST, payload: _context3.t0 });
+					return (0, _effects.put)({ type: _constants.POST_MSG, payload: _constants.server_error_msg });
 
 				case 22:
-					setError(_constants.ERR_EXIST, _context3.t0);
-
-				case 23:
 				case "end":
 					return _context3.stop();
 			}
@@ -32185,26 +32072,13 @@ function postMessage(action) {
 	}, _marked3, this, [[7, 17]]);
 }
 
-// function* loginUser(action){
-// 	try {
-// 		let token = yield call(axios.post, "http://localhost:6060/api/auth", JSON.stringify(action.payload), {"Content-Type":"application/json"});
-// 		localStorage.sagaToken = JSON.stringify(token);
-// 		yield put({type: "USER_TOKEN", payload: token});
-// 	}
-// 	catch(err){
-// 		yield put({type: "USER_TOKEN", payload: null});
-// 	}
-// }
-
 function mySaga() {
 	return _regenerator2.default.wrap(function mySaga$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
 					_context4.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)(_constants.GET_ROOMS, getAllRooms), (0, _effects.takeEvery)(_constants.GET_MESSAGES, getMessages), (0, _effects.takeEvery)(_constants.POST_MESSAGE, postMessage)
-					// takeLatest(LOGIN_USER, loginUser)
-					]);
+					return (0, _effects.all)([(0, _effects.takeEvery)(_constants.GET_ROOMS, getAllRooms), (0, _effects.takeEvery)(_constants.GET_MESSAGES, getMessages), (0, _effects.takeEvery)(_constants.POST_MESSAGE, postMessage)]);
 
 				case 2:
 				case "end":
@@ -32212,22 +32086,6 @@ function mySaga() {
 			}
 		}
 	}, _marked4, this);
-}
-
-function setError(type, errorObj) {
-	return _regenerator2.default.wrap(function setError$(_context5) {
-		while (1) {
-			switch (_context5.prev = _context5.next) {
-				case 0:
-					_context5.next = 2;
-					return (0, _effects.put)({ type: type, payload: errorObj });
-
-				case 2:
-				case "end":
-					return _context5.stop();
-			}
-		}
-	}, _marked5, this);
 }
 
 exports.default = mySaga;
@@ -32248,7 +32106,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var getCurrentRoom = exports.getCurrentRoom = function getCurrentRoom(state) {
-  return state.selectedRoom;
+  return state.msgs.selectedRoom;
 };
 
 /***/ }),
