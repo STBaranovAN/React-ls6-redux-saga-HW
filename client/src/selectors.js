@@ -1,0 +1,1 @@
+export const getCurrentRoom = state => state.msgs.selectedRoom

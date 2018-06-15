@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import { no_msgs_msg, choose_room_msg } from "./constants/constants";
+import { Wrapper } from "./wrapper";
 
 class Messages extends React.Component {
 	constructor(props){
@@ -21,27 +23,27 @@ class Messages extends React.Component {
 		let roomMessages = this.props.msgs.roomMessages || [];
 
 		if(err) {
-			return (<div className="messages">
+			return (<Wrapper>
 						<h2>{err}</h2>
-					</div>
+					</Wrapper>
 			)
 		}
 		
 		if(roomMessages.length > 0) {
 			return (
-				<div className="messages">
+				<Wrapper>
 					<h2>{roomName}</h2>
 					<div className="text-right">
 						{roomMessages.map((item, index) => {
 							return <p key={index}>{item.text}</p>
 						})}
 					</div>
-				</div>
+				</Wrapper>
 			)
 		} else {
-			return (<div className="messages">
+			return (<Wrapper>
 						<h2>{no_msgs_msg}</h2>
-					</div>
+					</Wrapper>
 			)
 		}
 	}

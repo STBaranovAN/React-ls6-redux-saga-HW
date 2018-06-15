@@ -1,9 +1,32 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import styled from "styled-components";
 import { getRooms, selectRoom } from "./actions/actions";
 import Room from "./item";
 import { no_room_msg } from "./constants/constants";
+import { Wrapper } from "./wrapper";
+
+const Title = styled.h2`
+	font-size: 1.5em;
+	text-align: center;
+	color: palevioletred;
+`;
+
+const List = styled.ul`
+	list-style-type: none;
+`;
+
+const ListItem = styled.li`
+	border: 2px solid blue;
+	border-radius: 3px;
+	background: azure;
+	color: black;
+	margin: 10px;
+	&:hover {
+		cursor: pointer;
+	} 
+`;
 
 class Rooms extends React.Component {
 	constructor(props){
@@ -23,33 +46,33 @@ class Rooms extends React.Component {
 
 		if(err)		
 		{
-			return (<div className="rooms">
-						<h2>{err}</h2>
-					</div>
+			return (<Wrapper>
+						<Title>{err}</Title>
+					</Wrapper>
 			)
 		}
 		
 		if(allRooms.length > 0) {
 			return (
-				<div className="rooms">
-							<h2>All rooms:</h2>
-							<ul>
+					<Wrapper>
+							<Title>All rooms:</Title>
+							<List>
 								{allRooms.map((item, index) => {
-									return <Room
-											key={index} name={item.name} 
+									return <ListItem key={index}><Room
+											name={item.name} 
 											onClick={() => { 
 												this.props.selectRoom(item);
 											}}
-										/>
+										/></ListItem>
 								})
 							}
-							</ul>	
-				</div>
+							</List>	
+					</Wrapper>
 			)
 		} else {
-			return (<div className="rooms">
-						<h2>{no_room_msg}</h2>
-					</div>)
+			return (<Wrapper>
+						<Title>{no_room_msg}</Title>
+					</Wrapper>)
 		}
 	}
 }
