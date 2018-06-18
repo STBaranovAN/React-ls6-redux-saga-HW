@@ -5,21 +5,15 @@ import styled from "styled-components";
 import { getRooms, selectRoom } from "./actions/actions";
 import Room from "./item";
 import { no_room_msg } from "./constants/constants";
-import { Wrapper } from "./wrapper";
-
-const Title = styled.h2`
-	font-size: 1.5em;
-	text-align: center;
-	color: palevioletred;
-`;
+import { Wrapper, Title } from "./components";
 
 const List = styled.ul`
 	list-style-type: none;
 `;
 
 const ListItem = styled.li`
-	border: 2px solid blue;
-	border-radius: 3px;
+	border: 2px outset blue;
+	border-radius: 5px;
 	background: azure;
 	color: black;
 	margin: 10px;
@@ -56,6 +50,7 @@ class Rooms extends React.Component {
 			return (
 					<Wrapper>
 							<Title>All rooms:</Title>
+							<br/>
 							<List>
 								{allRooms.map((item, index) => {
 									return <ListItem key={index}><Room

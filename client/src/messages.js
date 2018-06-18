@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
 import { no_msgs_msg, choose_room_msg } from "./constants/constants";
-import { Wrapper } from "./wrapper";
+import { Wrapper, Title, SimpleText } from "./components";
 
 class Messages extends React.Component {
 	constructor(props){
@@ -24,7 +23,7 @@ class Messages extends React.Component {
 
 		if(err) {
 			return (<Wrapper>
-						<h2>{err}</h2>
+						<Title>{err}</Title>
 					</Wrapper>
 			)
 		}
@@ -32,17 +31,17 @@ class Messages extends React.Component {
 		if(roomMessages.length > 0) {
 			return (
 				<Wrapper>
-					<h2>{roomName}</h2>
+					<Title>{roomName}</Title>
 					<div className="text-right">
 						{roomMessages.map((item, index) => {
-							return <p key={index}>{item.text}</p>
+							return <b><SimpleText key={index}>{item.text}</SimpleText></b>
 						})}
 					</div>
 				</Wrapper>
 			)
 		} else {
 			return (<Wrapper>
-						<h2>{no_msgs_msg}</h2>
+						<Title>{no_msgs_msg}</Title>
 					</Wrapper>
 			)
 		}

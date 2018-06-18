@@ -3,23 +3,31 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import styled from "styled-components";
 import { addMessage } from "./actions/actions";
-import { btn_new_msg, tf_new_msg } from "./constants/constants";
-import { Wrapper } from "./wrapper";
+import { btn_new_msg } from "./constants/constants";
+import { Wrapper } from "./components";
 //import {Component} from "react";
 
-const Button = styled.button`
+const SubmitButton = styled.button`
 	background-color: green;
 	padding: 5px 10px;
 	color: white;
+	float: right;
 `;
 
 const Input = styled.input`
 	padding: 0.5em;
 	margin: 0.5em;
-	color: palevioletred;
-	background: lightgreen;
-	border: none;
+	color: black;
+	background: lightblue;
+	border: 3px inset green;
 	border-radius: 3px;
+	width: 100%;
+`;
+
+const ErrorText = styled.p`
+	font-size: 1.2em;
+	font-weight: bold;
+  	color: crimson;
 `;
 
 class PostMsg extends React.Component {
@@ -44,7 +52,7 @@ class PostMsg extends React.Component {
 		return (
 			<Wrapper>
 				<div style={{ display: err ? "block" : "none" }}>
-					<p className="error">{err}</p>
+					<ErrorText>{err}</ErrorText>
 				</div>
 				<Input
 					value={this.state.text || ''}
@@ -52,12 +60,12 @@ class PostMsg extends React.Component {
 				>
 				</Input>
 				<br/>
-				<Button onClick={() => {
+				<SubmitButton onClick={() => {
 					this.props.addMessage(this.state.text)
 				}}
 				>
 					{btn_new_msg}
-				</Button>
+				</SubmitButton>
 			</Wrapper>
 		)
 	}

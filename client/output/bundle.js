@@ -3862,25 +3862,6 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/styles/app.css":
-/*!******************************************************!*\
-  !*** ./node_modules/css-loader!./src/styles/app.css ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, "body, html, #container {\n\twidth: 100%;\n\theight: 90%;\n\tmargin: 0;\n}\n\ndiv.main {\n\tmargin: 10px;\n}\n\ndiv.rooms {\n\tborder: 2px solid blue;\n}\n\ndiv.rooms ul {\n\tlist-style-type: none;\n}\n\ndiv.rooms ul li {\n\tborder: 2px solid blue;\n\tborder-radius: 5px;\n\tbackground: azure;\n\tcolor: black;\n\tmargin: 10px; \n}\n\ndiv.rooms ul li:hover {\n\tcursor: pointer;\n} \n\ndiv.messages {\n\tborder: 2px solid coral;\n\tpadding: 15px;\n}\n\ndiv.msgform {\n\tborder: 2px solid chocolate;\n}\n\ndiv.msgform textarea {\n\twidth: 100%;\n}\n\np.error {\n\tcolor: crimson;\n}", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./src/styles/bootstrap.min.css":
 /*!****************************************************************!*\
   !*** ./node_modules/css-loader!./src/styles/bootstrap.min.css ***!
@@ -35547,9 +35528,9 @@ var _sagas2 = _interopRequireDefault(_sagas);
 
 __webpack_require__(/*! ./styles/bootstrap.min.css */ "./src/styles/bootstrap.min.css");
 
-__webpack_require__(/*! ./styles/app.css */ "./src/styles/app.css");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import './styles/app.css';
 
 var sagaMw = (0, _reduxSaga2.default)();
 var store = (0, _redux.createStore)(_rootreducer2.default, (0, _redux.applyMiddleware)(sagaMw));
@@ -35560,6 +35541,43 @@ _reactDom2.default.render(_react2.default.createElement(
   { store: store },
   _react2.default.createElement(_main2.default, null)
 ), document.getElementById("container"));
+
+/***/ }),
+
+/***/ "./src/components.js":
+/*!***************************!*\
+  !*** ./src/components.js ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.SimpleText = exports.Title = exports.Wrapper = undefined;
+
+var _taggedTemplateLiteral2 = __webpack_require__(/*! babel-runtime/helpers/taggedTemplateLiteral */ "./node_modules/babel-runtime/helpers/taggedTemplateLiteral.js");
+
+var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
+
+var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tpadding: 4em;\n  \tbackground: papayawhip;\n\theight: 100%;\n"], ["\n\tpadding: 4em;\n  \tbackground: papayawhip;\n\theight: 100%;\n"]),
+    _templateObject2 = (0, _taggedTemplateLiteral3.default)(["\n\tfont-size: 1.5em;\n\ttext-align: center;\n\tcolor: palevioletred;\n\ttext-decoration: underline;\n"], ["\n\tfont-size: 1.5em;\n\ttext-align: center;\n\tcolor: palevioletred;\n\ttext-decoration: underline;\n"]),
+    _templateObject3 = (0, _taggedTemplateLiteral3.default)(["\n\tfont-size: 1.0em;\n  \tcolor: black;\n"], ["\n\tfont-size: 1.0em;\n  \tcolor: black;\n"]);
+
+var _styledComponents = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.es.js");
+
+var _styledComponents2 = _interopRequireDefault(_styledComponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Wrapper = exports.Wrapper = _styledComponents2.default.section(_templateObject);
+
+var Title = exports.Title = _styledComponents2.default.h2(_templateObject2);
+
+var SimpleText = exports.SimpleText = _styledComponents2.default.p(_templateObject3);
 
 /***/ }),
 
@@ -35690,20 +35708,29 @@ var Main = function (_React$Component) {
 		value: function render() {
 			return _react2.default.createElement(
 				"div",
-				{ className: "main container" },
+				{ className: "container" },
+				_react2.default.createElement("div", { className: "row form-group" }),
 				_react2.default.createElement(
 					"div",
-					{ className: "row" },
+					{ className: "row form-group" },
 					_react2.default.createElement(
 						"div",
-						{ className: "col" },
+						{ className: "col form-group" },
 						_react2.default.createElement(_rooms2.default, null)
 					),
 					_react2.default.createElement(
 						"div",
-						{ className: "col" },
-						_react2.default.createElement(_messages2.default, null),
-						_react2.default.createElement("br", null),
+						{ className: "col form-group" },
+						_react2.default.createElement(_messages2.default, null)
+					)
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "row form-group" },
+					_react2.default.createElement("div", { className: "col form-group" }),
+					_react2.default.createElement(
+						"div",
+						{ className: "col form-group" },
 						_react2.default.createElement(_postmsg2.default, null)
 					)
 				)
@@ -35753,13 +35780,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
-var _styledComponents = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.es.js");
-
-var _styledComponents2 = _interopRequireDefault(_styledComponents);
-
 var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
 
-var _wrapper = __webpack_require__(/*! ./wrapper */ "./src/wrapper.js");
+var _components = __webpack_require__(/*! ./components */ "./src/components.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35790,10 +35813,10 @@ var Messages = function (_React$Component) {
 
 			if (err) {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						"h2",
+						_components.Title,
 						null,
 						err
 					)
@@ -35802,10 +35825,10 @@ var Messages = function (_React$Component) {
 
 			if (roomMessages.length > 0) {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						"h2",
+						_components.Title,
 						null,
 						roomName
 					),
@@ -35814,19 +35837,23 @@ var Messages = function (_React$Component) {
 						{ className: "text-right" },
 						roomMessages.map(function (item, index) {
 							return _react2.default.createElement(
-								"p",
-								{ key: index },
-								item.text
+								"b",
+								null,
+								_react2.default.createElement(
+									_components.SimpleText,
+									{ key: index },
+									item.text
+								)
 							);
 						})
 					)
 				);
 			} else {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						"h2",
+						_components.Title,
 						null,
 						_constants.no_msgs_msg
 					)
@@ -35879,8 +35906,9 @@ var _taggedTemplateLiteral2 = __webpack_require__(/*! babel-runtime/helpers/tagg
 
 var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
 
-var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tbackground-color: green;\n\tpadding: 5px 10px;\n\tcolor: white;\n"], ["\n\tbackground-color: green;\n\tpadding: 5px 10px;\n\tcolor: white;\n"]),
-    _templateObject2 = (0, _taggedTemplateLiteral3.default)(["\n\tpadding: 0.5em;\n\tmargin: 0.5em;\n\tcolor: palevioletred;\n\tbackground: lightgreen;\n\tborder: none;\n\tborder-radius: 3px;\n"], ["\n\tpadding: 0.5em;\n\tmargin: 0.5em;\n\tcolor: palevioletred;\n\tbackground: lightgreen;\n\tborder: none;\n\tborder-radius: 3px;\n"]);
+var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tbackground-color: green;\n\tpadding: 5px 10px;\n\tcolor: white;\n\tfloat: right;\n"], ["\n\tbackground-color: green;\n\tpadding: 5px 10px;\n\tcolor: white;\n\tfloat: right;\n"]),
+    _templateObject2 = (0, _taggedTemplateLiteral3.default)(["\n\tpadding: 0.5em;\n\tmargin: 0.5em;\n\tcolor: black;\n\tbackground: lightblue;\n\tborder: 3px inset green;\n\tborder-radius: 3px;\n\twidth: 100%;\n"], ["\n\tpadding: 0.5em;\n\tmargin: 0.5em;\n\tcolor: black;\n\tbackground: lightblue;\n\tborder: 3px inset green;\n\tborder-radius: 3px;\n\twidth: 100%;\n"]),
+    _templateObject3 = (0, _taggedTemplateLiteral3.default)(["\n\tfont-size: 1.2em;\n\tfont-weight: bold;\n  \tcolor: crimson;\n"], ["\n\tfont-size: 1.2em;\n\tfont-weight: bold;\n  \tcolor: crimson;\n"]);
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
@@ -35898,15 +35926,17 @@ var _actions = __webpack_require__(/*! ./actions/actions */ "./src/actions/actio
 
 var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
 
-var _wrapper = __webpack_require__(/*! ./wrapper */ "./src/wrapper.js");
+var _components = __webpack_require__(/*! ./components */ "./src/components.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //import {Component} from "react";
 
-var Button = _styledComponents2.default.button(_templateObject);
+var SubmitButton = _styledComponents2.default.button(_templateObject);
 
 var Input = _styledComponents2.default.input(_templateObject2);
+
+var ErrorText = _styledComponents2.default.p(_templateObject3);
 
 var PostMsg = function (_React$Component) {
 	(0, _inherits3.default)(PostMsg, _React$Component);
@@ -35937,14 +35967,14 @@ var PostMsg = function (_React$Component) {
 			var err = this.props.err;
 
 			return _react2.default.createElement(
-				_wrapper.Wrapper,
+				_components.Wrapper,
 				null,
 				_react2.default.createElement(
 					"div",
 					{ style: { display: err ? "block" : "none" } },
 					_react2.default.createElement(
-						"p",
-						{ className: "error" },
+						ErrorText,
+						null,
 						err
 					)
 				),
@@ -35954,7 +35984,7 @@ var PostMsg = function (_React$Component) {
 				}),
 				_react2.default.createElement("br", null),
 				_react2.default.createElement(
-					Button,
+					SubmitButton,
 					{ onClick: function onClick() {
 							_this2.props.addMessage(_this2.state.text);
 						}
@@ -36105,9 +36135,8 @@ var _taggedTemplateLiteral2 = __webpack_require__(/*! babel-runtime/helpers/tagg
 
 var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
 
-var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tfont-size: 1.5em;\n\ttext-align: center;\n\tcolor: palevioletred;\n"], ["\n\tfont-size: 1.5em;\n\ttext-align: center;\n\tcolor: palevioletred;\n"]),
-    _templateObject2 = (0, _taggedTemplateLiteral3.default)(["\n\tlist-style-type: none;\n"], ["\n\tlist-style-type: none;\n"]),
-    _templateObject3 = (0, _taggedTemplateLiteral3.default)(["\n\tborder: 2px solid blue;\n\tborder-radius: 3px;\n\tbackground: azure;\n\tcolor: black;\n\tmargin: 10px;\n\t&:hover {\n\t\tcursor: pointer;\n\t} \n"], ["\n\tborder: 2px solid blue;\n\tborder-radius: 3px;\n\tbackground: azure;\n\tcolor: black;\n\tmargin: 10px;\n\t&:hover {\n\t\tcursor: pointer;\n\t} \n"]);
+var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tlist-style-type: none;\n"], ["\n\tlist-style-type: none;\n"]),
+    _templateObject2 = (0, _taggedTemplateLiteral3.default)(["\n\tborder: 2px outset blue;\n\tborder-radius: 5px;\n\tbackground: azure;\n\tcolor: black;\n\tmargin: 10px;\n\t&:hover {\n\t\tcursor: pointer;\n\t} \n"], ["\n\tborder: 2px outset blue;\n\tborder-radius: 5px;\n\tbackground: azure;\n\tcolor: black;\n\tmargin: 10px;\n\t&:hover {\n\t\tcursor: pointer;\n\t} \n"]);
 
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
@@ -36129,15 +36158,13 @@ var _item2 = _interopRequireDefault(_item);
 
 var _constants = __webpack_require__(/*! ./constants/constants */ "./src/constants/constants.js");
 
-var _wrapper = __webpack_require__(/*! ./wrapper */ "./src/wrapper.js");
+var _components = __webpack_require__(/*! ./components */ "./src/components.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Title = _styledComponents2.default.h2(_templateObject);
+var List = _styledComponents2.default.ul(_templateObject);
 
-var List = _styledComponents2.default.ul(_templateObject2);
-
-var ListItem = _styledComponents2.default.li(_templateObject3);
+var ListItem = _styledComponents2.default.li(_templateObject2);
 
 var Rooms = function (_React$Component) {
 	(0, _inherits3.default)(Rooms, _React$Component);
@@ -36166,10 +36193,10 @@ var Rooms = function (_React$Component) {
 
 			if (err) {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						Title,
+						_components.Title,
 						null,
 						err
 					)
@@ -36178,13 +36205,14 @@ var Rooms = function (_React$Component) {
 
 			if (allRooms.length > 0) {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						Title,
+						_components.Title,
 						null,
 						"All rooms:"
 					),
+					_react2.default.createElement("br", null),
 					_react2.default.createElement(
 						List,
 						null,
@@ -36204,10 +36232,10 @@ var Rooms = function (_React$Component) {
 				);
 			} else {
 				return _react2.default.createElement(
-					_wrapper.Wrapper,
+					_components.Wrapper,
 					null,
 					_react2.default.createElement(
-						Title,
+						_components.Title,
 						null,
 						_constants.no_room_msg
 					)
@@ -36496,36 +36524,6 @@ var getCurrentRoom = exports.getCurrentRoom = function getCurrentRoom(state) {
 
 /***/ }),
 
-/***/ "./src/styles/app.css":
-/*!****************************!*\
-  !*** ./src/styles/app.css ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(/*! !../../node_modules/css-loader!./app.css */ "./node_modules/css-loader/index.js!./src/styles/app.css");
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-
 /***/ "./src/styles/bootstrap.min.css":
 /*!**************************************!*\
   !*** ./src/styles/bootstrap.min.css ***!
@@ -36553,37 +36551,6 @@ var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyl
 if(content.locals) module.exports = content.locals;
 
 if(false) {}
-
-/***/ }),
-
-/***/ "./src/wrapper.js":
-/*!************************!*\
-  !*** ./src/wrapper.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Wrapper = undefined;
-
-var _taggedTemplateLiteral2 = __webpack_require__(/*! babel-runtime/helpers/taggedTemplateLiteral */ "./node_modules/babel-runtime/helpers/taggedTemplateLiteral.js");
-
-var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
-
-var _templateObject = (0, _taggedTemplateLiteral3.default)(["\n\tpadding: 4em;\n  \tbackground: papayawhip;\n"], ["\n\tpadding: 4em;\n  \tbackground: papayawhip;\n"]);
-
-var _styledComponents = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.es.js");
-
-var _styledComponents2 = _interopRequireDefault(_styledComponents);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Wrapper = exports.Wrapper = _styledComponents2.default.section(_templateObject);
 
 /***/ })
 

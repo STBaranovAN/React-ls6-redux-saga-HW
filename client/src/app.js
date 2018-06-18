@@ -7,7 +7,7 @@ import Main from "./main";
 import rootReducer from "./rootreducer";
 import mySaga from "./sagas";
 import './styles/bootstrap.min.css';
-import './styles/app.css';
+// import './styles/app.css';
 
 let sagaMw = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMw));
